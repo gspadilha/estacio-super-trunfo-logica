@@ -1,5 +1,14 @@
 #include <stdio.h>
 
+// Define the attribute options as an enum
+enum ATRIBUTOS {
+    POPULACAO,
+    AREA,
+    PIB,
+    DENSIDADE,
+    PIB_PER_CAPITA
+};
+
 int main() {
     // Dados da Carta 1 (pré-definidos)
     char estado1[] = "SP";
@@ -22,11 +31,10 @@ int main() {
     // Cálculos para ambas as cartas
     float densidade1 = populacao1 / area1;
     float densidade2 = populacao2 / area2;
-    float pib_per_capita1 = (pib1 * 1000000000) / populacao1;
-    float pib_per_capita2 = (pib2 * 1000000000) / populacao2;
+    float pib_per_capita1 = pib1 / populacao1; // Corrigido: não multiplica por 1e9
+    float pib_per_capita2 = pib2 / populacao2;
 
-    // Escolha do atributo para comparação (definido no código)
-    // Opções: POPULACAO, AREA, PIB, DENSIDADE, PIB_PER_CAPITA
+    // Escolha do atributo para comparação
     const int ATRIBUTO_COMPARACAO = POPULACAO;
 
     // Variáveis para armazenar o resultado
