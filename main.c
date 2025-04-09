@@ -1,148 +1,148 @@
 #include <stdio.h>
+#include <string.h>
 
-// Estruturas para armazenar os dados das cartas
-struct {
-    char estado[2];
-    char cidade[30];
-    int populacao;
+// Define the country structs to hold data for each card
+struct Country {
+    char name[50];
+    char state[2];
+    int population;
     float area;
-    float pib; // em bilhões de reais
-    int pontos_turisticos;
-    float densidade; // hab/km²
-} carta1, carta2;
+    float pib; // in billions
+    float density;
+    int tourist_points;
+};
 
-// Dados da Carta 1 (São Paulo)
-void carregar_carta1() {
-    carta1.estado[0] = 'S';
-    carta1.estado[1] = 'P';
-    strcpy(carta1.cidade, "São Paulo");
-    carta1.populacao = 12300000;
-    carta1.area = 1521.11f;
-    carta1.pib = 699.28f; // em bilhões de reais
-    carta1.pontos_turisticos = 50;
-    carta1.densidade = carta1.populacao / carta1.area;
+// Array of countries with predefined data
+const struct Country countries[] = {
+    {"São Paulo", "SP", 12300000, 1521.11f, 699.28f, 12300000 / 1521.11f, 50},
+    {"Rio de Janeiro", "RJ", 6748000, 1200.25f, 300.50f, 6748000 / 1200.25f, 30}
+};
+
+// Function to print country information
+void printCountry(const struct Country* country) {
+    printf("Name: %s\nState: %s\n", country->name, country->state);
+    printf("Population: %d\nArea: %.2f km²\nPIB: %.2f bilhões\nDensity: %.2f hab/km²\nTourist Points: %d\n\n",
+           country->population, country->area, country->pib,
+           country->density, country->tourist_points);
 }
 
-// Dados da Carta 2 (Rio de Janeiro)
-void carregar_carta2() {
-    carta2.estado[0] = 'R';
-    carta2.estado[1] = 'J';
-    strcpy(carta2.cidade, "Rio de Janeiro");
-    carta2.populacao = 6748000;
-    carta2.area = 1200.25f;
-    carta2.pib = 300.50f; // em bilhões de reais
-    carta2.pontos_turisticos = 30;
-    carta2.densidade = carta2.populacao / carta2.area;
+// Function to calculate total score based on two attributes
+float calculateTotalScore(const struct Country* country1, const struct Country* country2, int attr1, int attr2) {
+    float score1 = country1->attr1 + country1->attr2;
+    float score2 = country2->attr1 + country2->attr2;
+
+    return (score1 > score2) ? score1 : score2;
 }
 
-// Menu interativo para escolha do atributo a ser comparado
-void menu() {
-    printf("\n");
-    printf("Super Trunfo - Nível Aventureiro\n");
-    printf("Por favor, escolha o atributo para comparação:\n");
-    printf("1. População\n");
-    printf("2. Área\n");
-    printf("3. PIB\n");
-    printf("4. Densidade Demográfica\n");
-    printf("5. Pontos Turísticos\n");
-    printf("\nOpção: ");
-}
-
-// Funções para exibição de informações
-void imprimir_carta(struct carta dados, char mensagem[]) {
-    printf("%s: %s (%s)\n", dados.cidade, dados.estado[0], dados.estado[1]);
-    printf("População: %d\n", dados.populacao);
-    printf("Área: %.2f km²\n", dados.area);
-    printf("PIB: %.2f bilhões\n", dados.pib);
-    printf("Densidade: %.2f hab/km²\n", dados.densidade);
-    printf("Pontos turísticos: %d\n\n", dados.pontos_turisticos);
-}
-
-// Função para determinar o vencedor
-int comparar_attrato(struct carta carta1, struct carta carta2, int atributo) {
-    float valor1 = 0, valor2 = 0;
-    char ganhador[30];
-
-    switch(attributo) {
-        case 1: // População
-            valor1 = carta1.populacao;
-            valor2 = carta2.populacao;
-            break;
-        case 2: // Área
-            valor1 = carta1.area;
-            valor2 = carta2.area;
-            break;
-        case 3: // PIB
-            valor1 = carta1.pib;
-            valor2 = carta2.pib;
-            break;
-        case 4: // Densidade Demográfica
-            valor1 = carta1.densidade;
-            valor2 = carta2.densidade;
-            if (valor1 < valor2) {
-                ganhador[0] = ' ';
-                ganhador[1] = '1';
-            } else if (valor2 < valor1) {
-                ganhador[0] = ' ';
-                ganhador[1] = '2';
-            } else {
-                printf("Empate na densidade!\n");
-                return 0;
-            }
-            break;
-        case 5: // Pontos Turísticos
-            valor1 = carta1.pontos_turisticos;
-            valor2 = carta2.pontos_turisticos;
-            if (valor1 > valor2) {
-                ganhador[0] = ' ';
-                ganhador[1] = '1';
-            } else if (valor2 > valor1) {
-                ganhador[0] = ' ';
-                ganhador[1] = '2';
-            } else {
-                printf("Empate nos pontos turísticos!\n");
-                return 0;
-            }
-            break;
-        default:
-            printf("Atributo inválido!\n");
-            return -1;
-    }
-
-    if (ganhador[0] == ' ') {
-        printf("Carta %s venceu!\n", ganhador);
-    } else {
-        printf("Resultados:\n");
-        imprimir_carta(carta1, "Carta 1");
-        imprimir_carta(carta2, "Carta 2");
-        if (ganhador[0] == '1') {
-            printf("Carta 1 (%s) venceu!\n", carta1.cidade);
-        } else {
-            printf("Carta 2 (%s) venceu!\n", carta2.cidade);
-        }
-    }
-
-    return ganhador[1] - '0';
-}
-
-// Main function
+// Main function to implement the comparison
 int main() {
-    // Carregar dados iniciais
-    carregar_carta1();
-    carregar_carta2();
+    // Print initial message
+    printf("Welcome to Super Trunfo Advanced Comparison System\n");
+    printf("Choose two attributes for comparison:\n");
 
-    // Escolha do atributo
-    int atributo_escolhido;
+    int selected_attrs[2];
+    int current_selection = 0;
+
     do {
-        menu();
-        scanf("%d", &atributo_escolhido);
-        if (attributo_escolhido < 1 || attributo_escolhido > 5) {
-            printf("Opção inválida! Digite novamente:\n");
-        }
-    } while (attributo_escolhido < 1 || attributo_escolhido > 5);
+        printf("Available attributes: POPULACAO, AREA, PIB, DENSIDADE, PONTOS_TURISTICOS\n");
 
-    // Comparar e exibir resultado
-    int resultador = comparar_attrato(carta1, carta2, atributo_escolhido);
+        // First attribute selection
+        if (current_selection == 0) {
+            printf("Enter the first attribute number:\n");
+            scanf("%d", &selected_attrs[0]);
+
+            // Validate input
+            if (selected_attrs[0] < 1 || selected_attrs[0] > 5) {
+                printf("Invalid selection. Try again.\n");
+                continue;
+            }
+
+            current_selection++;
+        } else {
+            // Second attribute selection must be different
+            do {
+                printf("Enter the second attribute number (different from %d):\n", selected_attrs[0]);
+                scanf("%d", &selected_attrs[1]);
+
+                if (selected_attrs[1] == selected_attrs[0]) {
+                    printf("Second attribute cannot be the same as the first. Try again.\n");
+                    continue;
+                }
+
+                if (selected_attrs[1] < 1 || selected_attrs[1] > 5) {
+                    printf("Invalid selection. Try again.\n");
+                    continue;
+                }
+
+                current_selection++;
+            } while (true);
+        }
+    } while (current_selection != 2);
+
+    // Validate attribute numbers
+    if (selected_attrs[0] == selected_attrs[1]) {
+        printf("Error: Second attribute must be different from the first. Exiting...\n");
+        return 1;
+    }
+
+    // Retrieve country attributes based on selected indices
+    int attr_index[] = {selected_attrs[0]-1, selected_attrs[1]-1};
+
+    struct Country* card1 = &countries[0];
+    struct Country* card2 = &countries[1];
+
+    switch (attr_index[0]) {
+        case 0: // Population
+            card1->attr1 = card1->population;
+            break;
+        case 1: // Area
+            card1->attr1 = card1->area;
+            break;
+        case 2: // PIB
+            card1->attr1 = card1->pib * 1000000000; // Convert to billions as per original code
+            break;
+        case 3: // Density
+            card1->attr1 = card1->density;
+            break;
+        case 4: // Tourist Points
+            card1->attr1 = card1->tourist_points;
+            break;
+    }
+
+    switch (attr_index[1]) {
+        case 0: // Population
+            card2->attr2 = card2->population;
+            break;
+        case 1: // Area
+            card2->attr2 = card2->area;
+            break;
+        case 2: // PIB
+            card2->attr2 = card2->pib * 1000000000; // Convert to billions as per original code
+            break;
+        case 3: // Density
+            card2->attr2 = card2->density;
+            break;
+        case 4: // Tourist Points
+            card2->attr2 = card2->tourist_points;
+            break;
+    }
+
+    float total1 = calculateTotalScore(card1, card2, attr_index[0], attr_index[1]);
+    float total2 = calculateTotalScore(card2, card1, attr_index[1], attr_index[0]); // Swap for comparison
+
+    if (total1 > total2) {
+        printf("Card 1 (São Paulo) has a higher total score of %.2f vs Card 2's %.2f\n",
+               total1, total2);
+    } else if (total2 > total1) {
+        printf("Card 2 (Rio de Janeiro) has a higher total score of %.2f vs Card 1's %.2f\n",
+               total2, total1);
+    } else {
+        printf("It's an Empate! Both cards have equal scores.\n");
+    }
+
+    // Print all country information
+    printCountry(card1);
+    printCountry(card2);
 
     return 0;
 }
